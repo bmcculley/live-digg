@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block head %}{% end %}
+
+{% block content %}
+  {% for entry in entries %}
+    {% module Entry(entry) %}
+  {% end %}
+  <div style="float:clear;padding:10px 0;"></div>
+  <nav>
+    <ul class="pager">
+    {% if prevpage %}
+  	  <li><a class="pull-left previous" href="./?page={{ prevpage }}">Previous </a></li>
+    {% end %}
+    {% if nextpage %}
+  	  <li><a class="pull-right next" href="./?page={{ nextpage }}">Next </a></li>
+    {% end %}
+    </ul>
+  </nav>
+  <div style="float:clear;padding:10px 0;"></div>
+{% end %}
+
+{% block footer %}{% end %}
+
+{% block bottom %}
+<script src="{{ static_url("js/favico.min.js") }}"></script>
+{% end %}

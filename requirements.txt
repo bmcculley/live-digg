@@ -1,0 +1,7 @@
+bcrypt
+futures
+MySQL-python
+redis
+tornado
+torndb
+bs4

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block head %}{% end %}
+
+{% block content %}
+  <form action="/auth/login" method="post" class="login-form">
+    <label for="email">Email or Username:</label>
+    <input type="text" class="form-control" id="email" name="email" placeholder="Email address" required/>
+    <label for="password">Password:</label>
+    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required/>
+    {% module xsrf_form_html() %}
+    <input type="submit" name="lsubmit" value="Login" />
+  </form>
+{% end %}
+
+{% block footer %}{% end %}
+
+{% block bottom %}{% end %}
