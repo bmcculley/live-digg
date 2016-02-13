@@ -11,7 +11,7 @@ You'll need to have the following installed:
  * Redis
  * MySQL
 
-You'll also need the Python libraries from the requirements.txt file including on your system.
+You'll also need the Python libraries from the requirements.txt file included on your system.
 
 ### Demo
 
