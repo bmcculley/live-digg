@@ -210,7 +210,7 @@ if __name__ == "__main__":
     http_server = tornado.httpserver.HTTPServer(Application())
     http_server.listen(options.port)
     scheduler = TornadoScheduler()
-    scheduler.add_job(pushmsgs.scraper, 'cron', day_of_week='*',
+    scheduler.add_job(pushmsgs.scraper, 'cron', day_of_week='mon-fri',
                       hour='*', minute='*/15', id="diggScraper")
     scheduler.start()
 
