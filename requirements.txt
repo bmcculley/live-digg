@@ -4,4 +4,4 @@ MySQL-python
 redis
 tornado
 torndb
-bs4
+beautifulsoup4
