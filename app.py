@@ -9,6 +9,7 @@ import tornado.escape
 import tornado.ioloop
 import tornado.web
 import torndb
+import hashlib
 import bcrypt
 import concurrent.futures
 import threading
@@ -16,6 +17,7 @@ import redis
 import math
 import os
 import pushmsgs
+from datetime import datetime
 
 define("port", default=8888, help="run on the given port", type=int)
 define("mysql_host", default="127.0.0.1:3306", help="database host")
@@ -80,6 +82,10 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def any_author_exists(self):
         return bool(self.db.get("SELECT * FROM users LIMIT 1"))
+
+    def get_now(self):
+        now = datetime.now()
+        return now.date().isoformat()
 
     # return human readable date from epoch string
     def epochToStr(epochString):
@@ -150,8 +156,16 @@ class AuthCreateHandler(BaseHandler):
 
     @gen.coroutine
     def post(self):
-        # if self.any_author_exists():
-        #    raise tornado.web.HTTPError(400, "author already created")
+        access_level = 1
+        if not self.admin_exists():
+            access_level = 10
+
+        # populate created date and verify string
+        created_date = self.get_now()
+        h = hashlib.new('ripemd160')
+        h.update(self.get_argument("email")) 
+        verify_string = h.hexdigest()
+
         hashed_password = yield executor.submit(
             bcrypt.hashpw, tornado.escape.utf8(self.get_argument("password")),
             bcrypt.gensalt())
@@ -179,6 +193,7 @@ class AuthLoginHandler(BaseHandler):
             "SELECT * FROM users WHERE email = %s or name = %s",
             self.get_argument("email"), self.get_argument("email"))
 
+        # maybe make the error messages a bit less revealing
         if not author:
             self.render("login.html", error="email not found")
             return
@@ -186,6 +201,7 @@ class AuthLoginHandler(BaseHandler):
             bcrypt.hashpw, tornado.escape.utf8(self.get_argument("password")),
             tornado.escape.utf8(author.hashed_password))
         if hashed_password == author.hashed_password:
+            # need to update last login time
             self.set_secure_cookie("live_digg", str(author.id))
             self.redirect(self.get_argument("next", "/"))
         else:
