@@ -19,4 +19,4 @@ You'll also need the Python libraries from the requirements.txt file installed o
 
 ### Post
 
-A little post I wrote up about [Live Digg](http://mkdir.info/live-digg.html).
+A little post I wrote up about [Live Digg](http://blog.mkdir.info/live-digg-using-tornado-redis-and-mysql.html).
